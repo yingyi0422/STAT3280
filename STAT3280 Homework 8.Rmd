@@ -1,0 +1,219 @@
+---
+title: "STAT3280 Homework 8"
+author: "Yingyi Zhu"
+date: '2022-12-13'
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## data manipulation
+```{r}
+library(dplyr)
+data <- read.csv("/Users/zach0422/Desktop/STAT3280/DX-Y.NYB (1).csv")
+
+data$Close <- as.numeric(data$Close)
+         
+bush_1 <- data %>%
+  filter(Date >= '1988-11-08' & Date <= '1989-11-08') %>%
+  na.omit()
+
+clinton_1 <- data %>%
+  filter(Date >= '1992-11-03' & Date <= '1993-12-03') %>%
+  na.omit()
+
+clinton_2 <- data %>%
+  filter(Date >= '1996-11-05' & Date <= '1997-11-05') %>%
+  na.omit()
+
+bush_2 <- data %>%
+  filter(Date >= '2000-11-07' & Date <= '2001-11-07') %>%
+  na.omit()
+
+bush_3 <- data %>%
+  filter(Date >= '2004-11-02' & Date <= '2005-11-02') %>%
+  na.omit()
+
+obama_1 <- data %>%
+  filter(Date >= '2008-11-04' & Date <= '2009-11-04') %>%
+  na.omit()
+
+obama_2 <- data %>%
+  filter(Date >= '2012-11-06' & Date <= '2013-11-06') %>%
+  na.omit()
+
+trump_1 <- data %>%
+  filter(Date >= '2016-11-08' & Date <= '2017-11-16') %>%
+  na.omit()
+```
+
+## plot 1988
+```{r}
+bush_1 <- bush_1 %>%
+  mutate(percentage = ((Close - Close[1]) / Close[1] * 100))
+
+library(ggplot2)
+library(ggdark)
+
+
+plot1 <- ggplot(bush_1, aes(x = as.Date(Date), y = percentage)) + 
+  geom_area(fill = "blue") + 
+  geom_line() +
+  scale_x_date(date_breaks = "70 days") + 
+  scale_y_continuous(limits = c(-10,10)) +
+  dark_theme_gray() +
+  labs(title="1988 George Bush", 
+       x = "Date",
+       y="% Change Since Election Day", 
+       caption="Source: Yahoo Finance")
+plot1
+```
+## plot 1992
+```{r}
+clinton_1 <- clinton_1 %>%
+  mutate(percentage = ((Close - Close[1]) / Close[1] * 100))
+
+plot2 <- ggplot(clinton_1, aes(x = as.Date(Date), y = percentage)) + 
+  geom_area(fill = "blue") + 
+  geom_line() +
+  scale_x_date(date_breaks = "70 days") + 
+  scale_y_continuous(limits = c(-10,10)) +
+  dark_theme_gray() +
+  labs(title="1992 Bill Clinton", 
+       x = "Date",
+       y="% Change Since Election Day", 
+       caption="Source: Yahoo Finance")
+plot2
+```
+## plot 1996
+```{r}
+clinton_2 <- clinton_2 %>%
+  mutate(percentage = ((Close - Close[1]) / Close[1] * 100))
+
+library(ggplot2)
+library(ggdark)
+
+plot3 <- ggplot(clinton_2, aes(x = as.Date(Date), y = percentage)) + 
+  geom_area(fill = "blue") + 
+  geom_line() +
+  scale_x_date(date_breaks = "70 days") + 
+  scale_y_continuous(limits = c(-10,10)) +
+  dark_theme_gray() +
+  labs(title="1996 Bill Clinton", 
+       x = "Date",
+       y="% Change Since Election Day", 
+       caption="Source: Yahoo Finance")
+plot3
+```
+## plot 2000
+```{r}
+bush_2 <- bush_2 %>%
+  mutate(percentage = ((Close - Close[1]) / Close[1] * 100))
+
+library(ggplot2)
+library(ggdark)
+
+plot4 <- ggplot(bush_2, aes(x = as.Date(Date), y = percentage)) + 
+  geom_area(fill = "red") + 
+  geom_line() +
+  scale_x_date(date_breaks = "70 days") + 
+  scale_y_continuous(limits = c(-10,10)) +
+  dark_theme_gray() +
+  labs(title="2000 George Bush", 
+       x = "Date",
+       y="% Change Since Election Day", 
+       caption="Source: Yahoo Finance")
+plot4
+```
+
+## plot 2004
+
+```{r}
+bush_3 <- bush_3 %>%
+  mutate(percentage = ((Close - Close[1]) / Close[1] * 100))
+
+library(ggplot2)
+library(ggdark)
+
+plot5 <- ggplot(bush_3, aes(x = as.Date(Date), y = percentage)) + 
+  geom_area(fill = "blue") + 
+  geom_line() +
+  scale_x_date(date_breaks = "70 days") + 
+  scale_y_continuous(limits = c(-10,10)) +
+  dark_theme_gray() +
+  labs(title="2004 George Bush", 
+       x = "Date",
+       y="% Change Since Election Day", 
+       caption="Source: Yahoo Finance")
+plot5
+```
+
+## plot 2008
+
+```{r}
+obama_1 <- obama_1 %>%
+  mutate(percentage = ((Close - Close[1]) / Close[1] * 100))
+
+library(ggplot2)
+library(ggdark)
+
+plot6 <- ggplot(obama_1, aes(x = as.Date(Date), y = percentage)) + 
+  geom_area(fill = "red") + 
+  geom_line() +
+  scale_x_date(date_breaks = "70 days") + 
+  scale_y_continuous(limits = c(-10,10)) +
+  dark_theme_gray() +
+  labs(title="2008 Barack Obama", 
+       x = "Date",
+       y="% Change Since Election Day", 
+       caption="Source: Yahoo Finance")
+plot6
+```
+
+## plot 2012
+```{r}
+obama_2 <- obama_2 %>%
+  mutate(percentage = ((Close - Close[1]) / Close[1] * 100))
+
+library(ggplot2)
+library(ggdark)
+
+plot7 <- ggplot(obama_2, aes(x = as.Date(Date), y = percentage)) + 
+  geom_area(fill = "red") + 
+  geom_line() +
+  scale_x_date(date_breaks = "70 days") + 
+  scale_y_continuous(limits = c(-10,10)) +
+  dark_theme_gray() +
+  labs(title="2012 Barack Obama", 
+       x = "Date",
+       y="% Change Since Election Day", 
+       caption="Source: Yahoo Finance")
+plot7
+```
+
+## plot 2016
+```{r}
+trump_1 <- trump_1 %>%
+  mutate(percentage = ((Close - Close[1]) / Close[1] * 100))
+
+library(ggplot2)
+library(ggdark)
+
+
+plot8 <- ggplot(trump_1, aes(x = as.Date(Date), y = percentage)) + 
+  geom_area(fill = "red") + 
+  geom_line() +
+  scale_x_date(date_breaks = "70 days") + 
+  scale_y_continuous(limits = c(-10,10)) +
+  dark_theme_gray() +
+  labs(title="2016 Donald Trump", 
+       x = "Date",
+       y="% Change Since Election Day", 
+       caption="Source: Yahoo Finance")
+plot8
+```
+

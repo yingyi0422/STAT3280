@@ -1,0 +1,87 @@
+---
+title: "STAT 3280 Homework 6"
+author: "Your Name"
+date: "November 11, 2022"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\begin{center}
+.Rmd file can be found on Collab under Resources/Assigments
+\end{center}
+
+#### Q1: 
+
+Using the `YahooFin.Rdata` dataset, create a plot of the closing stock price, `close`, for  Apple `AAPL` and the S&P 500 `^GSPC` in the year 2019. Emphasize the performance of Apple stock relative to the S&P 500 using plot elements, themes, and colors. The horizontal axis should be a date object. Choose the plot type and the vertical axis variable so that your plot best presents the message.  
+```{r}
+setwd("/Users/zach0422/Desktop/STAT3280/data")
+load("YahooFin.RData")
+library(dplyr)
+library(ggplot2)
+library(tidyverse)
+
+my_theme <- theme_bw() + 
+  theme(axis.text = element_text(size = 12), 
+        axis.title = element_text(size = 12), 
+        legend.text = element_text(size = 12),
+        legend.title = element_text(size = 14))
+
+SP500 <- YahooFin %>%
+  filter(date >= "2019-01-01" & date < "2020-01-01") %>%
+  filter(symbol == "^GSPC") %>%
+  select(date, close) %>%
+  rename(SP500 = close)
+
+Apple <- YahooFin %>%
+  filter(date >= "2019-01-01" & date <= "2020-01-01") %>%
+  filter(symbol == "AAPL") %>%
+  select(date, close) %>%
+  rename(Apple = close)
+
+q1data <- SP500 %>%
+  left_join(Apple)
+
+p1 <- ggplot(q1data, aes(x = date, y = SP500)) +
+  geom_line(aes(color = "S&P 500")) + 
+  geom_line(aes(y = Apple * 70, color = "Apple")) +
+  scale_y_continuous(limits = c(2000, 5500), 
+                     sec.axis = sec_axis(trans = ~./70, 
+                                         name = "Apple Closing Stock Price")) +
+  scale_x_date(date_breaks = "44 days", date_labels = "%b%d") +
+  labs(x = "Month", y = "S&P 500 Closing Stock Price", 
+       title = "2019 Closing Stock Price S&P 500 v.s. Apple") + 
+  my_theme
+p1
+
+```
+
+
+#### Q2: 
+
+Using the `iris.RData` dataset, create a plot that emphasizes the `Petal.Width` and `Petal.Length` of `Species` setosa and its difference from the other two species in the data. The message of the plot should highlight the similarity or difference using these two variables using plot elements, themes, and colors. Choose the plot type, the horizontal variable, and the vertical axis variable so that your plot best presents the information and highlights the message you want to convey.
+```{r}
+setwd("/Users/zach0422/Desktop/STAT3280/data")
+load("iris.RData")
+
+p2 <- ggplot(iris) + geom_point(aes(x = Petal.Width, 
+                                    y = Petal.Length, 
+                                    fill = Species,
+                                    shape = Species,
+                                    size = Species)) +
+  scale_x_continuous("Petal Width", limits = c(0,3), expand = c(0,0)) + 
+  scale_y_continuous("Petal Length", limits = c(0,8), expand = c(0,0)) + 
+  scale_shape_manual(values = c(23,21,21)) +
+  scale_fill_manual(values = c("#FF3333", "#FFFF00", "#FFFFCC")) +
+  scale_size_manual(values = c(4,2,2)) +
+  labs(x = "Petal Width", y = "Petal Length", 
+       title = "Setosa v.s. The Other Two Species (Petal Width and Length)") +
+  my_theme
+p2
+```
